@@ -4,7 +4,7 @@ require "net/ssh"
 require "json"
 
 module MFi
-  Version = "0.9.0"
+  Version = "0.9.1"
 end
 
 require "mpower"

@@ -1,6 +1,7 @@
 $: << File.dirname(__FILE__) + "/lib"
 
 require "mfi"
+require "pp"
 
 task :default => :sample
 
@@ -12,19 +13,29 @@ task :env do
   )
 end
 
+task :enable => :env do
+  @mpower.exec { |m|
+    pp m.enable_read
+    pp m.enable_write
+  }
+end
+
 task :sample => :env do
-  @mpower.connect!
-  @mpower.sample.each { |reading|
-    puts reading
+  @mpower.exec { |m|
+    m.sample.each { |reading|
+      puts reading
+    }
   }
 end
 
 task :switch_off => :env do
-  @mpower.connect!
-  @mpower.switch_off
+  @mpower.exec { |m|
+    m.switch_off
+  }
 end
 
 task :switch_on => :env do
-  @mpower.connect!
-  @mpower.switch_on
+  @mpower.exec { |m|
+    m.switch_on
+  }
 end

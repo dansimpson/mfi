@@ -13,20 +13,20 @@ gem install mfi
 mPower ports are linux based wifi-enabled power strips.  Each port has sensors for amps, voltage, and power factor.  Additionally each port has a relay.  Here is a script that samples all powers, and disables a port if the energy exceeds 10kWh.
 
 ```ruby
-device = MFi::MPower.new(
+mpower = MFi::MPower.new(
   :host => "hostname",
   :user => "username",
   :pass => "password"
 )
 
-device.connect!
-
-device.sample.each { |reading|
-  puts reading.to_s
-  if reading.energy > 10
-    puts "Port #{reading.port} has consumed >= 10 kWh. Switching off..."
-    device.switch_off(reading.port)
-  end
+mpower.exec { |remote| 
+  remote.sample.each { |reading|
+    puts reading.to_s
+    if reading.energy > 10
+      puts "Port #{reading.port} has consumed >= 10 kWh. Switching off..."
+      remote.switch_off(reading.port)
+    end
+  }
 }
 ```
 

@@ -46,6 +46,14 @@ module MFi
       @ssh = Net::SSH.start(@host, @user, :password => @pass)
     end
 
+    # execute commands in a given execution context
+    def exec &block
+      connect!
+      yield self
+    ensure
+      disconnect!
+    end
+
     # Sample all metrics from the mPower device
     # +port+ the port option, default is all
     def sample port=-1
@@ -61,14 +69,14 @@ module MFi
 
     # Write enable port, allowing relay toggling
     # +port+ the port option, default is all
-    def enable port=-1
-      run(:func => "enableWrite", :port => port)
+    def enable_write port=-1
+      run(:func => "enableWrite", :port => port, :value => 1)
     end
 
     # Write disable port, disabling relay toggling
     # +port+ the port option, default is all
-    def disable port=-1
-      run(:func => "enableRead", :port => port)
+    def enable_read port=-1
+      run(:func => "enableRead", :port => port, :value => 1)
     end
 
     # Switch off, or disable power on a given port
@@ -84,6 +92,10 @@ module MFi
     end
 
     private
+
+    def disconnect!
+      @ssh.close
+    end
 
     def run opts
       env = opts.map { |k,v| "#{k}=#{v}" }.join(" ")
