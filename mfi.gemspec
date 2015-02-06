@@ -14,7 +14,7 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = true
   
   s.authors = ["Dan Simpson"]
-  s.add_dependency("ssh", ">= 1.1.0")
+  s.add_dependency("net-ssh", ">= 2.0.0")
   s.add_dependency("json", ">= 1.8.1")
 
   s.files = `git ls-files`.split("\n")
